@@ -1,0 +1,15 @@
+<div class="user-list">
+  <div class="user-card" *ngFor="let user of users">
+    <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+    <ul class="user-details">
+      <li><strong>Employee ID:</strong> {{ user.employeeId }}</li>
+      <li><strong>Email:</strong> {{ user.email }}</li>
+      <li><strong>Phone Number:</strong> {{ user.phoneNumber }}</li>
+      <li><strong>Role:</strong> {{ user.role }}</li>
+      <li><strong>Current Grade ID:</strong> {{ user.currentGradeId }}</li>
+    </ul>
+    <button class="delete-button" (click)="deleteUser(user.employeeId)">
+      Delete
+    </button>
+  </div>
+</div>
