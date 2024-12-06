@@ -1,0 +1,911 @@
+<!-- MyPay Master Page-->
+
+<!-- Master Page path-->
+
+<!--Document type-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="en">
+<head id="Head1"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+   
+    <script type="text/javascript">
+        if (document.URL.toString().indexOf('Default.aspx') > -1 || document.URL.toString().indexOf('MyForms.aspx') > -1) {
+            document.write(unescape("%3Cscript src='Scripts/jquery-3.7.1.js' type='text/javascript'%3E%3C/script%3E"));            
+            document.write(unescape("%3Cscript src='Scripts/jquery-migrate-3.4.0.min.js' type='text/javascript'%3E%3C/script%3E"));            
+            document.write(unescape("%3Cscript src='Scripts/jquery-ui-1.13.2.js' type='text/javascript'%3E%3C/script%3E"));
+        }
+        else {
+            document.write(unescape("%3Cscript src='../Scripts/jquery-3.7.1.js' type='text/javascript'%3E%3C/script%3E"));
+            document.write(unescape("%3Cscript src='../Scripts/jquery-migrate-3.4.0.min.js' type='text/javascript'%3E%3C/script%3E"));            
+            document.write(unescape("%3Cscript src='../Scripts/jquery-ui-1.13.2.js' type='text/javascript'%3E%3C/script%3E"));
+
+        }
+    </script> 
+    <link href="../Styles/styles.css?v=4" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        ////function to load window
+var url = "/779";
+
+        $(window).load(function () {
+        var isPrvYr =$("#isPrv").val().toLowerCase();
+        var finyr = $("#finY").val();
+            if(isPrvYr == "true"){    
+                    $("#finyr").text("FY "+finyr.slice(0, 4)+"-"+finyr.slice(4, 6));
+                    $(".spaceClass").attr('src','/779PrevYrMyPay/images/spacer.png');
+                    $("#mylogo").attr('src','/779PrevYrMyPay/images/MyPay_logo.png');
+                    $("#defaultpage").attr('href','/779PrevYrMyPay/Default.aspx');
+               }else{
+                $(".spaceClass").attr('src','/779/images/spacer.png');
+                $("#mylogo").attr('src','/779/images/MyPay_logo.png');
+                $("#defaultpage").attr('href','/779/Default.aspx');
+                }
+
+            var prev_item, current_item;
+            if ($("#mypayMenu>ul>li").size() == 5) {
+                $("#mypayMenu>ul>li:eq(0)>a").addClass("fbp");
+                $("#mypayMenu>ul>li:eq(1)>a").addClass("updates");
+                $("#mypayMenu>ul>li:eq(2)>a").addClass("investments");
+                $("#mypayMenu>ul>li:eq(3)>a").addClass("statements");
+                $("#mypayMenu>ul>li:eq(4)>a").addClass("forms");
+            }
+            else {
+                $("#mypayMenu>ul>li:eq(0)>a").addClass("fbp");
+                $("#mypayMenu>ul>li:eq(1)>a").addClass("updates");
+                $("#mypayMenu>ul>li:eq(2)>a").addClass("statements");
+                $("#mypayMenu>ul>li:eq(3)>a").addClass("forms");
+            }
+            $(".menu-middle-wrapper>a").css("display", "none");
+            $("#adminMenu>a").css("display", "none");
+            var page_title = document.title.split(" ");
+            if (page_title == "")
+                current_item = "fbp";
+            else
+                current_item = page_title[1].toLowerCase();
+            ////Menu list funtion
+            $("#mypayMenu>ul>li>a").each(function () {
+                if ($(this).hasClass(current_item)) {
+                    $(this).addClass("active");
+                }
+            });
+            //Nav menu position for associates
+            /*if ($("#adminMenu").css("display") != "block") {
+            $("#wrapper #header").css("top", "0px");
+            }*/
+        });
+        /*
+  @function Document ready function
+  */
+        $(document).ready(function () {
+            $(".mask").css("height", $(document).height());
+            //$(".mask").hide();
+            $('#faq_popup').hide();
+            $('#bankers_popup').hide();
+            ////function for window position
+            $(window).scroll(function () {
+                var top_pos = (($(document).scrollTop()) + ($(window).height() * 25 / 100)) + "px";
+                $('#faq_popup').css("top", top_pos);
+                $('#bankers_popup').css("top", top_pos);
+            });
+
+$(document).keydown(function (event) {
+    if (event.keyCode == 123) { // Prevent F12
+        return false;
+    } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
+        return false;
+    }
+});
+            ////function for popup close
+            $(".popup_close_btn").click(function () {
+                $(".mask").hide();
+                $("#popup_container1").prop("src", "");
+                $("#bank_container").prop("src", "");
+                $('#faq_popup').hide();
+                $('#bankers_popup').hide();
+                $(".popup_close_btn").hide();
+                $("body").css("overflow", "auto");
+            });
+        });
+
+        ////function for popup open
+        function show_faq_popup() {
+            $(".mask").show();
+            $('#faq_popup').show();
+            $(".popup_close_btn").show();
+            var isPrvYr =$("#isPrv").val().toLowerCase();
+            if(isPrvYr == "true")
+                {    
+                    url = "/779PrevYrMyPay"; 
+                }
+            $("#popup_container1").prop("src", url+"/FAQ.aspx");
+            $("body").css("overflow", "hidden");
+        }
+        ////function to check bankname
+        function fnBankNameAlreadyExist() {
+            alert("Bank Name already exist, please choose different bank name");
+        }
+        ////function to show bankname
+        function show_bankers_popup() {
+            $(".mask").show();
+            $('#bankers_popup').show();
+            $(".popup_close_btn").show();
+            var isPrvYr =$("#isPrv").val().toLowerCase();
+            if(isPrvYr == "true")
+                {    
+                    url = "/779PrevYrMyPay"; 
+                }
+            $("#bank_container").prop("src", url+"/PreferredBankers.aspx");
+            $("body").css("overflow", "hidden");
+        }
+    </script>
+    
+    <title>My FBP</title>
+    <script src="../Scripts/jquery.tipTip.js" type="text/javascript"></script>
+    <link href="../Styles/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../Styles/tipTip.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery-ui-1.13.2.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function pageLoad(sender, args) {
+            if (args.get_isPartialLoad()) {
+                documentEvents();
+            } else {
+                documentEvents();
+            }
+        }
+
+        var saCount = 0;
+        var isSubmitted = 0;
+        var isChanged = 0;
+
+       
+
+        function documentEvents() {
+            // $('input[type="text"]').tipTip();
+            $(document).on("filter", "td span", function () {
+                //$("td span").filter(function () {
+                    //alert($(this).text());
+                    var str = $(this).text();
+                    if (str.localeCompare("Assignment Allow") == 0) {
+                        $(this).text('Assignment Allow.');
+                    }
+                });
+                // $("#MainContent_gvCurrentEarningsMonthly_lblComponents_12").text('Assignment Allow.')
+                $("#hraImg").tipTip();
+                $(".mask").css("height", $(document).height());
+                $(".mask").hide();
+                $('#calculator_popup').hide();
+                $(window).scroll(function () {
+                    var top_pos = (($(document).scrollTop()) + ($(window).height() * 25 / 100)) + "px";
+                    $('#calculator_popup').css("top", top_pos);
+                });
+
+                $(document).on("click", ".popup_close_btn", function () {
+                    //$(".popup_close_btn").click(function () {
+                    $(".mask").hide();
+                    $("#popup_container").prop("src", "");
+                    $('#calculator_popup').hide();
+                    $(".popup_close_btn").hide();
+                    $("body").css("overflow", "auto");
+                });
+
+                $("#MainContent_gvCurrentEarningsMonthly tr:odd").addClass("odd");
+                $("#MainContent_gvCurrentEarningsMonthly tr:even").addClass("even");
+                $("input[type=text][id^=MainContent_gvCurrentEarningsMonthly]").keydown(function (event) {
+                    if (event.shiftKey == true) {
+                        event.preventDefault();
+                    }
+
+                    if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                        (event.keyCode >= 96 && event.keyCode <= 105) ||
+                        event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                        event.keyCode == 39 || event.keyCode == 46)
+                    { }
+                    else {
+                        event.preventDefault();
+                    }
+
+                    if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+                        event.preventDefault();
+                });
+
+                $('input[type="text"]').bind('cut copy paste', function (e) {
+                    e.preventDefault(); //disable cut,copy,paste
+                });
+
+                $(document).click(function () {
+                    $("#MainContent_lblSuccessMessage").hide();
+                    $('input[type="text"]').bind('cut copy paste', function (e) {
+                        e.preventDefault(); //disable cut,copy,paste
+                    });
+                });
+            };
+
+            function show_popup() {
+               
+            $(".mask").show();
+            $('#calculator_popup').show();
+            $(".popup_close_btn").show();
+            $("#popup_container").prop("src", "../UI.MyInvestments/HRACalculator.aspx?fbphra=" + $("#hidHRA").val());
+            $("body").css("overflow", "hidden");
+        }
+
+        function saPop() {
+            if (saCount == 0) {
+                alert('Please go through FBP Policy before defining Superannuation.');
+                saCount = 1;
+            }
+        }
+         function callSubmit() {
+             var isChrome = !!window.chrome && !!window.chrome.webstore;
+             var isEdge = /Edge\/\d./i.test(navigator.userAgent);
+             if (isChrome || isEdge) {
+                 $('#MainContent_gvCurrentEarningsMonthly tr td:nth-child(1)').each(function myfunction(e) {
+                     var getValue = $(this).text().trim();
+
+                     if (getValue == "Superannuation Fund Contribution") {
+                         var $spanid = $(this).find('span').eq(0);
+                         var $a = $spanid[0];
+                         var said = $a.id;
+                         var num = parseInt(/^.*\_(\d+)$/.exec(said)[1]);
+
+                         getSuperAnnuationValue = $('#MainContent_gvCurrentEarningsMonthly_txtEditableMonthlyComp_' + num).val().replace(',', '');
+                         var sessionValue = '0';
+
+                         if (parseInt(getSuperAnnuationValue, 10) != parseInt(sessionValue, 10)) {
+                             if (saCount == 0) {
+                                 alert("Please go through FBP Policy before defining Superannuation.");
+                                 saCount = 1;
+                             }
+                         }
+                     }
+                 });
+             }
+
+             //149175 LTA non editable changes
+             if (document.getElementById('MainContent_IsLTAEditable').value == "Y" && document.getElementById('MainContent_hidpopupLTA').value == 'false')
+             {
+                 if (!confirm("LTA value once updated cannot be changed and would remain the same for the whole Financial Year.")) {
+                     return false; 
+                 }
+             }
+             submitpost();
+        }
+      
+        function SetHiddenField(popupvalue, configvalue) {
+            document.getElementById('MainContent_hidpopupLTA').value = popupvalue;
+            document.getElementById('MainContent_IsLTAEditable').value = configvalue
+        }
+        function submitpost() {
+            if (confirm("If any selection is found inappropriate suitable adjustment will be made in the Special Allowance")) {
+                __doPostBack('ctl00$MainContent$btnSubmit', '')
+                return true;
+            }
+            else {
+                saCount = 1;
+                return false;
+            };
+
+        }
+
+       
+
+            
+
+
+
+
+        function stop() {
+            throw new Error('This is not an error. This is just to abort javascript');
+        }
+
+    </script>
+<style type="text/css">
+	/* <![CDATA[ */
+	#mypayMenu img.icon { border-style:none;vertical-align:middle; }
+	#mypayMenu img.separator { border-style:none;display:block; }
+	#mypayMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#mypayMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#mypayMenu ul.dynamic { z-index:1; }
+	#mypayMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#mypayMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#mypayMenu a.popout { background-image:url("/779/WebResource.axd?d=PuwXiTDgn83T9Tx1J9dc9sYTXvJ3si36BaXdzt5DVTgE3pAwylJC2pMXBQlOhTlrKoNvU7WLU8GCHAyTgSfZsEJI3gFvUp2VTaimo7APE9c1&t=638369264615952268");background-repeat:no-repeat;background-position:right center;padding-right:14px; }
+	/* ]]> */
+</style><title>
+
+</title></head>
+<body>
+    <form method="post" action="./FlexibleBenefitPlan.aspx" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTEzMTcyNDc4MTQPFiAeEUlzU2FsYXJ5UHJvY2Vzc2VkAgEeClN1Ym1pdEZsYWdnHgZVc2VySWQFBzIxMDMwMTEeEHNob3VsZERpc2FibGVMVEEFAVkeCUFubnVhbEFHQwKo+RgeEUlzRm9vZGNhcmRQcmVzZW50Zh4RRWFybmluZ3NEYXRhVGFibGUy4LoBAAEAAAD/////AQAAAAAAAAAMAgAAAElGbGV4aVBheS5EYXRhTGF5ZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBQEAAABMQ1RTLk9uZUMuTXlQYXkuRmxleGlQYXkuRGF0YUxheWVyLkFzc29jaWF0ZUVhcm5pbmdzK0N1cnJlbnRFYXJuaW5nc0RhdGFUYWJsZQMAAAAZRGF0YVRhYmxlLlJlbW90aW5nVmVyc2lvbglYbWxTY2hlbWELWG1sRGlmZkdyYW0DAQEOU3lzdGVtLlZlcnNpb24CAAAACQMAAAAGBAAAAL4aPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTE2Ij8+DQo8eHM6c2NoZW1hIHRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgeG1sbnM6bXN0bnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOm1zZGF0YT0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp4bWwtbXNkYXRhIiBhdHRyaWJ1dGVGb3JtRGVmYXVsdD0icXVhbGlmaWVkIiBlbGVtZW50Rm9ybURlZmF1bHQ9InF1YWxpZmllZCI+DQogIDx4czplbGVtZW50IG5hbWU9IkN1cnJlbnRFYXJuaW5ncyI+DQogICAgPHhzOmNvbXBsZXhUeXBlPg0KICAgICAgPHhzOnNlcXVlbmNlPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJDb21wb25lbnROYW1lIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iQ29tcG9uZW50SWQiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJBY3R1YWxDb21wb25lbnRJZCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlBheU91dEZyZXF1ZW5jeSIgbXNkYXRhOkNhcHRpb249IkNvbXBvbmVudFR5cGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJGbGV4aSIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IkNvbXBvbmVudFZhbHVlIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iQW5udWFsQ29tcG9uZW50VmFsdWUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJNaW5WYWx1ZSIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9Ik1heFZhbHVlIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iTWluUGVyIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iTWF4UGVyIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iQmFzZUNvbXBvbmVudCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlRvb2xUaXAiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJSYW5nZVR5cGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJTb3J0T3JkZXIiIHR5cGU9InhzOmludCIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJDb21wYW55SWQiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJBc3NvY2lhdGVpZCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlRvb2xUaXAyIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgIDwveHM6c2VxdWVuY2U+DQogICAgPC94czpjb21wbGV4VHlwZT4NCiAgPC94czplbGVtZW50Pg0KICA8eHM6ZWxlbWVudCBuYW1lPSJ0bXBEYXRhU2V0IiBtc2RhdGE6SXNEYXRhU2V0PSJ0cnVlIiBtc2RhdGE6TWFpbkRhdGFUYWJsZT0iaHR0cF94MDAzQV9feDAwMkZfX3gwMDJGX3RlbXB1cmkub3JnX3gwMDJGX0Fzc29jaWF0ZUVhcm5pbmdzLnhzZF94MDAzQV9DdXJyZW50RWFybmluZ3MiIG1zZGF0YTpVc2VDdXJyZW50TG9jYWxlPSJ0cnVlIj4NCiAgICA8eHM6Y29tcGxleFR5cGU+DQogICAgICA8eHM6Y2hvaWNlIG1pbk9jY3Vycz0iMCIgbWF4T2NjdXJzPSJ1bmJvdW5kZWQiIC8+DQogICAgPC94czpjb21wbGV4VHlwZT4NCiAgPC94czplbGVtZW50Pg0KPC94czpzY2hlbWE+BgUAAADCnQE8ZGlmZmdyOmRpZmZncmFtIHhtbG5zOm1zZGF0YT0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp4bWwtbXNkYXRhIiB4bWxuczpkaWZmZ3I9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLWRpZmZncmFtLXYxIj4NCiAgPHRtcERhdGFTZXQgeG1sbnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxIiBtc2RhdGE6cm93T3JkZXI9IjAiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5CYXNpYzwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4xPC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4xPC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TiAgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT4xMTkyNS4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+MTQzMTAwPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxUb29sVGlwIC8+DQogICAgICA8UmFuZ2VUeXBlPk5MPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjE8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgPC9DdXJyZW50RWFybmluZ3M+DQogICAgPEN1cnJlbnRFYXJuaW5ncyBkaWZmZ3I6aWQ9IkN1cnJlbnRFYXJuaW5nczIiIG1zZGF0YTpyb3dPcmRlcj0iMSIgZGlmZmdyOmhhc0NoYW5nZXM9Im1vZGlmaWVkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPlByb3ZpZGVudCBGdW5kPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjk8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjk8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5OICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjE4MDAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjIxNjAwPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxUb29sVGlwIC8+DQogICAgICA8UmFuZ2VUeXBlPk5MPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjE8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgPC9DdXJyZW50RWFybmluZ3M+DQogICAgPEN1cnJlbnRFYXJuaW5ncyBkaWZmZ3I6aWQ9IkN1cnJlbnRFYXJuaW5nczMiIG1zZGF0YTpyb3dPcmRlcj0iMiIgZGlmZmdyOmhhc0NoYW5nZXM9Im1vZGlmaWVkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPkhvdXNlIFJlbnQgQWxsb3dhbmNlPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjI8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjI8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5OPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT43MTU1LjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT44NTg2MDwvQW5udWFsQ29tcG9uZW50VmFsdWU+DQogICAgICA8TWluUGVyPjA8L01pblBlcj4NCiAgICAgIDxNYXhQZXI+MDwvTWF4UGVyPg0KICAgICAgPEJhc2VDb21wb25lbnQ+MTwvQmFzZUNvbXBvbmVudD4NCiAgICAgIDxUb29sVGlwIC8+DQogICAgICA8UmFuZ2VUeXBlPlBFUjwvUmFuZ2VUeXBlPg0KICAgICAgPFNvcnRPcmRlcj4yPC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3M0IiBtc2RhdGE6cm93T3JkZXI9IjMiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5Db252ZXlhbmNlIEFsbG93YW5jZTwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4zPC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4zPC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TjwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+ODAwLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT45NjAwPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxNaW5WYWx1ZT4wPC9NaW5WYWx1ZT4NCiAgICAgIDxNYXhWYWx1ZT4wPC9NYXhWYWx1ZT4NCiAgICAgIDxUb29sVGlwIC8+DQogICAgICA8UmFuZ2VUeXBlPkFCUzwvUmFuZ2VUeXBlPg0KICAgICAgPFNvcnRPcmRlcj4yPC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgICAgPFRvb2xUaXAyIC8+DQogICAgPC9DdXJyZW50RWFybmluZ3M+DQogICAgPEN1cnJlbnRFYXJuaW5ncyBkaWZmZ3I6aWQ9IkN1cnJlbnRFYXJuaW5nczUiIG1zZGF0YTpyb3dPcmRlcj0iNCIgZGlmZmdyOmhhc0NoYW5nZXM9Im1vZGlmaWVkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPk1lZGljYWwgQWxsb3dhbmNlPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjQ8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjQ8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjEyNTAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjE1MDAwPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxNaW5WYWx1ZT4wPC9NaW5WYWx1ZT4NCiAgICAgIDxNYXhWYWx1ZT4xMjUwPC9NYXhWYWx1ZT4NCiAgICAgIDxUb29sVGlwPiBNYXhpbXVtIDogUnMgMSwyNTAvLSBwbTwvVG9vbFRpcD4NCiAgICAgIDxSYW5nZVR5cGU+QUJTPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjI8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgICA8VG9vbFRpcDIgLz4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzNiIgbXNkYXRhOnJvd09yZGVyPSI1IiBkaWZmZ3I6aGFzQ2hhbmdlcz0ibW9kaWZpZWQiPg0KICAgICAgPENvbXBvbmVudE5hbWU+TGVhdmUgVHJhdmVsIEFsbG93YW5jZTwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD41PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD41PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+QSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TjwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+MC4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+MDwvQW5udWFsQ29tcG9uZW50VmFsdWU+DQogICAgICA8TWluVmFsdWU+MDwvTWluVmFsdWU+DQogICAgICA8TWF4VmFsdWU+MTAwMDAwPC9NYXhWYWx1ZT4NCiAgICAgIDxUb29sVGlwPiBNYXhpbXVtIDogUnMgMTAwLDAwMC8tIHBhPC9Ub29sVGlwPg0KICAgICAgPFJhbmdlVHlwZT5BQlM8L1JhbmdlVHlwZT4NCiAgICAgIDxTb3J0T3JkZXI+NDwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICAgIDxUb29sVGlwMiAvPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3M3IiBtc2RhdGE6cm93T3JkZXI9IjYiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5Nb2JpbGUgUmVpbWJ1cnNlbWVudDwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD43PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD43PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+WSAgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT4wLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4wPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxNaW5WYWx1ZT4wPC9NaW5WYWx1ZT4NCiAgICAgIDxNYXhWYWx1ZT41MDA8L01heFZhbHVlPg0KICAgICAgPFRvb2xUaXA+IE1heGltdW0gOiBScyA1MDAvLSBwbTwvVG9vbFRpcD4NCiAgICAgIDxSYW5nZVR5cGU+QUJTPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjQ8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgICA8VG9vbFRpcDIgLz4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzOCIgbXNkYXRhOnJvd09yZGVyPSI3IiBkaWZmZ3I6aGFzQ2hhbmdlcz0ibW9kaWZpZWQiPg0KICAgICAgPENvbXBvbmVudE5hbWU+Rm9vZCBSZWltYnVyc2VtZW50PC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjg8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjg8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPE1pblZhbHVlPjA8L01pblZhbHVlPg0KICAgICAgPE1heFZhbHVlPjMwMDA8L01heFZhbHVlPg0KICAgICAgPFRvb2xUaXA+IE1heGltdW0gOiBScyAzLDAwMC8tIHBtPC9Ub29sVGlwPg0KICAgICAgPFJhbmdlVHlwZT5BQlM8L1JhbmdlVHlwZT4NCiAgICAgIDxTb3J0T3JkZXI+NDwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICAgIDxUb29sVGlwMiAvPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3M5IiBtc2RhdGE6cm93T3JkZXI9IjgiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5TdXBlcmFubnVhdGlvbiBGdW5kIENvbnRyaWJ1dGlvbjwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4xMjwvQ29tcG9uZW50SWQ+DQogICAgICA8QWN0dWFsQ29tcG9uZW50SWQ+MTI8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT4wLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4wPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxNaW5QZXI+MDwvTWluUGVyPg0KICAgICAgPE1heFBlcj4xNTwvTWF4UGVyPg0KICAgICAgPEJhc2VDb21wb25lbnQ+MTwvQmFzZUNvbXBvbmVudD4NCiAgICAgIDxUb29sVGlwPiBNaW5pbXVtIGNvbnRyaWJ1dGlvbiBvZiBScy4gNTAwIHBlciBtb250aCBhbmQgc3ViamVjdCB0byBhIGNlaWxpbmcgb2YgMTUlIG9mIEJhc2ljIHNhbGFyeTwvVG9vbFRpcD4NCiAgICAgIDxSYW5nZVR5cGU+UEVSPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjQ8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgPC9DdXJyZW50RWFybmluZ3M+DQogICAgPEN1cnJlbnRFYXJuaW5ncyBkaWZmZ3I6aWQ9IkN1cnJlbnRFYXJuaW5nczEwIiBtc2RhdGE6cm93T3JkZXI9IjkiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5OYXRpb25hbCBQZW5zaW9uIFN5c3RlbTwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4xMTk8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjExODwvQWN0dWFsQ29tcG9uZW50SWQ+DQogICAgICA8UGF5T3V0RnJlcXVlbmN5Pk0gIDwvUGF5T3V0RnJlcXVlbmN5Pg0KICAgICAgPEZsZXhpPlkgIDwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+MC4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+MDwvQW5udWFsQ29tcG9uZW50VmFsdWU+DQogICAgICA8TWluUGVyPjA8L01pblBlcj4NCiAgICAgIDxNYXhQZXI+MTA8L01heFBlcj4NCiAgICAgIDxCYXNlQ29tcG9uZW50PjE8L0Jhc2VDb21wb25lbnQ+DQogICAgICA8VG9vbFRpcD4gTWF4aW11bSA6IDEwJSBvZiBCYXNpYyBwbTwvVG9vbFRpcD4NCiAgICAgIDxSYW5nZVR5cGU+UEVSPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjQ8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgPC9DdXJyZW50RWFybmluZ3M+DQogICAgPEN1cnJlbnRFYXJuaW5ncyBkaWZmZ3I6aWQ9IkN1cnJlbnRFYXJuaW5nczExIiBtc2RhdGE6cm93T3JkZXI9IjEwIiBkaWZmZ3I6aGFzQ2hhbmdlcz0ibW9kaWZpZWQiPg0KICAgICAgPENvbXBvbmVudE5hbWU+U3BlY2lhbCBBbGxvd2FuY2U8L0NvbXBvbmVudE5hbWU+DQogICAgICA8Q29tcG9uZW50SWQ+MTQ8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjE0PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TiAgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT45MTMyLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4xMDk1ODQ8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFRvb2xUaXAgLz4NCiAgICAgIDxSYW5nZVR5cGU+Tkw8L1JhbmdlVHlwZT4NCiAgICAgIDxTb3J0T3JkZXI+NTwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzMTIiIG1zZGF0YTpyb3dPcmRlcj0iMTEiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5BZHZhbmNlIFN0YXR1dG9yeSBCb251czwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4yNDU8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjI0NTwvQWN0dWFsQ29tcG9uZW50SWQ+DQogICAgICA8UGF5T3V0RnJlcXVlbmN5Pk0gIDwvUGF5T3V0RnJlcXVlbmN5Pg0KICAgICAgPEZsZXhpPk4gIDwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+MjAwMC4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+MjQwMDA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFRvb2xUaXAgLz4NCiAgICAgIDxSYW5nZVR5cGU+Tkw8L1JhbmdlVHlwZT4NCiAgICAgIDxTb3J0T3JkZXI+NTwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzMTMiIG1zZGF0YTpyb3dPcmRlcj0iMTIiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5Hcm9zcyBDb21wZW5zYXRpb248L0NvbXBvbmVudE5hbWU+DQogICAgICA8Q29tcG9uZW50SWQ+NjQ8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjY0PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+QSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TiAgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT4wLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4wPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxUb29sVGlwIC8+DQogICAgICA8UmFuZ2VUeXBlPk5MPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjY8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgPC9DdXJyZW50RWFybmluZ3M+DQogICAgPEN1cnJlbnRFYXJuaW5ncyBkaWZmZ3I6aWQ9IkN1cnJlbnRFYXJuaW5nczE0IiBtc2RhdGE6cm93T3JkZXI9IjEzIiBkaWZmZ3I6aGFzQ2hhbmdlcz0ibW9kaWZpZWQiPg0KICAgICAgPENvbXBvbmVudE5hbWU+SW5jZW50aXZlPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjE1PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4xNTwvQWN0dWFsQ29tcG9uZW50SWQ+DQogICAgICA8UGF5T3V0RnJlcXVlbmN5PkEgIDwvUGF5T3V0RnJlcXVlbmN5Pg0KICAgICAgPEZsZXhpPk4gIDwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+MTg3NS4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+MjI1MDA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFRvb2xUaXAgLz4NCiAgICAgIDxSYW5nZVR5cGU+Tkw8L1JhbmdlVHlwZT4NCiAgICAgIDxTb3J0T3JkZXI+ODwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzMTUiIG1zZGF0YTpyb3dPcmRlcj0iMTQiIGRpZmZncjpoYXNDaGFuZ2VzPSJtb2RpZmllZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5Ub3RhbCBDb21wZW5zYXRpb248L0NvbXBvbmVudE5hbWU+DQogICAgICA8Q29tcG9uZW50SWQ+MTY8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjE2PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+QSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TkEgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT40MzEyNDQuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjQzMTI0NDwvQW5udWFsQ29tcG9uZW50VmFsdWU+DQogICAgICA8VG9vbFRpcCAvPg0KICAgICAgPFJhbmdlVHlwZT5OTDwvUmFuZ2VUeXBlPg0KICAgICAgPFNvcnRPcmRlcj45PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxNiIgbXNkYXRhOnJvd09yZGVyPSIxNSIgZGlmZmdyOmhhc0NoYW5nZXM9Im1vZGlmaWVkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPlZvbHVudGFyeSBQcm92aWRlbnQgRnVuZDwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4yNDY8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjI0NjwvQWN0dWFsQ29tcG9uZW50SWQ+DQogICAgICA8UGF5T3V0RnJlcXVlbmN5Pk0gIDwvUGF5T3V0RnJlcXVlbmN5Pg0KICAgICAgPEZsZXhpPlkgIDwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+MC4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+MDwvQW5udWFsQ29tcG9uZW50VmFsdWU+DQogICAgICA8TWluUGVyPjA8L01pblBlcj4NCiAgICAgIDxNYXhQZXI+ODg8L01heFBlcj4NCiAgICAgIDxCYXNlQ29tcG9uZW50PjE8L0Jhc2VDb21wb25lbnQ+DQogICAgICA8VG9vbFRpcD4gTWF4aW11bSA6IDg4JSBvZiBCYXNpYyBwbTwvVG9vbFRpcD4NCiAgICAgIDxSYW5nZVR5cGU+UEVSPC9SYW5nZVR5cGU+DQogICAgICA8U29ydE9yZGVyPjEyPC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICA8L3RtcERhdGFTZXQ+DQogIDxkaWZmZ3I6YmVmb3JlPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxIiBtc2RhdGE6cm93T3JkZXI9IjAiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPkJhc2ljPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjE8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjE8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5OICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjExOTI1LjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4xNDMxMDA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj4xPC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MyIiBtc2RhdGE6cm93T3JkZXI9IjEiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPlByb3ZpZGVudCBGdW5kPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjk8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjk8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5OICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjE4MDAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjIxNjAwPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxTb3J0T3JkZXI+MTwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzMyIgbXNkYXRhOnJvd09yZGVyPSIyIiB4bWxucz0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5Ib3VzZSBSZW50IEFsbG93YW5jZTwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4yPC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4yPC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TjwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+NzE1NS4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+ODU4NjA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj4yPC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3M0IiBtc2RhdGE6cm93T3JkZXI9IjMiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPkNvbnZleWFuY2UgQWxsb3dhbmNlPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjM8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjM8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5OPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT44MDAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjk2MDA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj4yPC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3M1IiBtc2RhdGE6cm93T3JkZXI9IjQiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPk1lZGljYWwgQWxsb3dhbmNlPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjQ8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjQ8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjEyNTAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjE1MDAwPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxTb3J0T3JkZXI+MjwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzNiIgbXNkYXRhOnJvd09yZGVyPSI1IiB4bWxucz0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5MZWF2ZSBUcmF2ZWwgQWxsb3dhbmNlPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjU8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjU8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5BICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj40PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3M3IiBtc2RhdGE6cm93T3JkZXI9IjYiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPk1vYmlsZSBSZWltYnVyc2VtZW50PC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjc8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjc8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj40PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3M4IiBtc2RhdGE6cm93T3JkZXI9IjciIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPkZvb2QgUmVpbWJ1cnNlbWVudDwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD44PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD44PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+WSAgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT4wLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4wPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxTb3J0T3JkZXI+NDwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzOSIgbXNkYXRhOnJvd09yZGVyPSI4IiB4bWxucz0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCI+DQogICAgICA8Q29tcG9uZW50TmFtZT5TdXBlcmFubnVhdGlvbiBGdW5kIENvbnRyaWJ1dGlvbjwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD4xMjwvQ29tcG9uZW50SWQ+DQogICAgICA8QWN0dWFsQ29tcG9uZW50SWQ+MTI8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT4wLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4wPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxTb3J0T3JkZXI+NDwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzMTAiIG1zZGF0YTpyb3dPcmRlcj0iOSIgeG1sbnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiPg0KICAgICAgPENvbXBvbmVudE5hbWU+TmF0aW9uYWwgUGVuc2lvbiBTeXN0ZW08L0NvbXBvbmVudE5hbWU+DQogICAgICA8Q29tcG9uZW50SWQ+MTE5PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4xMTg8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5ZICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj40PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxMSIgbXNkYXRhOnJvd09yZGVyPSIxMCIgeG1sbnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiPg0KICAgICAgPENvbXBvbmVudE5hbWU+U3BlY2lhbCBBbGxvd2FuY2U8L0NvbXBvbmVudE5hbWU+DQogICAgICA8Q29tcG9uZW50SWQ+MTQ8L0NvbXBvbmVudElkPg0KICAgICAgPEFjdHVhbENvbXBvbmVudElkPjE0PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+TiAgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT45MTMyLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4xMDk1ODQ8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj41PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxMiIgbXNkYXRhOnJvd09yZGVyPSIxMSIgeG1sbnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiPg0KICAgICAgPENvbXBvbmVudE5hbWU+QWR2YW5jZSBTdGF0dXRvcnkgQm9udXM8L0NvbXBvbmVudE5hbWU+DQogICAgICA8Q29tcG9uZW50SWQ+MjQ1PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4yNDU8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5NICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5OICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjIwMDAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjI0MDAwPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxTb3J0T3JkZXI+NTwvU29ydE9yZGVyPg0KICAgICAgPENvbXBhbnlJZD5DSU48L0NvbXBhbnlJZD4NCiAgICAgIDxBc3NvY2lhdGVpZD4yMTAzMDExPC9Bc3NvY2lhdGVpZD4NCiAgICA8L0N1cnJlbnRFYXJuaW5ncz4NCiAgICA8Q3VycmVudEVhcm5pbmdzIGRpZmZncjppZD0iQ3VycmVudEVhcm5pbmdzMTMiIG1zZGF0YTpyb3dPcmRlcj0iMTIiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIj4NCiAgICAgIDxDb21wb25lbnROYW1lPkdyb3NzIENvbXBlbnNhdGlvbjwvQ29tcG9uZW50TmFtZT4NCiAgICAgIDxDb21wb25lbnRJZD42NDwvQ29tcG9uZW50SWQ+DQogICAgICA8QWN0dWFsQ29tcG9uZW50SWQ+NjQ8L0FjdHVhbENvbXBvbmVudElkPg0KICAgICAgPFBheU91dEZyZXF1ZW5jeT5BICA8L1BheU91dEZyZXF1ZW5jeT4NCiAgICAgIDxGbGV4aT5OICA8L0ZsZXhpPg0KICAgICAgPENvbXBvbmVudFZhbHVlPjAuMDA8L0NvbXBvbmVudFZhbHVlPg0KICAgICAgPEFubnVhbENvbXBvbmVudFZhbHVlPjA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj42PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxNCIgbXNkYXRhOnJvd09yZGVyPSIxMyIgeG1sbnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiPg0KICAgICAgPENvbXBvbmVudE5hbWU+SW5jZW50aXZlPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjE1PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4xNTwvQWN0dWFsQ29tcG9uZW50SWQ+DQogICAgICA8UGF5T3V0RnJlcXVlbmN5PkEgIDwvUGF5T3V0RnJlcXVlbmN5Pg0KICAgICAgPEZsZXhpPk4gIDwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+MTg3NS4wMDwvQ29tcG9uZW50VmFsdWU+DQogICAgICA8QW5udWFsQ29tcG9uZW50VmFsdWU+MjI1MDA8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj44PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxNSIgbXNkYXRhOnJvd09yZGVyPSIxNCIgeG1sbnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiPg0KICAgICAgPENvbXBvbmVudE5hbWU+VG90YWwgQ29tcGVuc2F0aW9uPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjE2PC9Db21wb25lbnRJZD4NCiAgICAgIDxBY3R1YWxDb21wb25lbnRJZD4xNjwvQWN0dWFsQ29tcG9uZW50SWQ+DQogICAgICA8UGF5T3V0RnJlcXVlbmN5PkEgIDwvUGF5T3V0RnJlcXVlbmN5Pg0KICAgICAgPEZsZXhpPk5BIDwvRmxleGk+DQogICAgICA8Q29tcG9uZW50VmFsdWU+NDMxMjQ0LjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT40MzEyNDQ8L0FubnVhbENvbXBvbmVudFZhbHVlPg0KICAgICAgPFNvcnRPcmRlcj45PC9Tb3J0T3JkZXI+DQogICAgICA8Q29tcGFueUlkPkNJTjwvQ29tcGFueUlkPg0KICAgICAgPEFzc29jaWF0ZWlkPjIxMDMwMTE8L0Fzc29jaWF0ZWlkPg0KICAgIDwvQ3VycmVudEVhcm5pbmdzPg0KICAgIDxDdXJyZW50RWFybmluZ3MgZGlmZmdyOmlkPSJDdXJyZW50RWFybmluZ3MxNiIgbXNkYXRhOnJvd09yZGVyPSIxNSIgeG1sbnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiPg0KICAgICAgPENvbXBvbmVudE5hbWU+Vm9sdW50YXJ5IFByb3ZpZGVudCBGdW5kPC9Db21wb25lbnROYW1lPg0KICAgICAgPENvbXBvbmVudElkPjI0NjwvQ29tcG9uZW50SWQ+DQogICAgICA8QWN0dWFsQ29tcG9uZW50SWQ+MjQ2PC9BY3R1YWxDb21wb25lbnRJZD4NCiAgICAgIDxQYXlPdXRGcmVxdWVuY3k+TSAgPC9QYXlPdXRGcmVxdWVuY3k+DQogICAgICA8RmxleGk+WSAgPC9GbGV4aT4NCiAgICAgIDxDb21wb25lbnRWYWx1ZT4wLjAwPC9Db21wb25lbnRWYWx1ZT4NCiAgICAgIDxBbm51YWxDb21wb25lbnRWYWx1ZT4wPC9Bbm51YWxDb21wb25lbnRWYWx1ZT4NCiAgICAgIDxTb3J0T3JkZXI+MTI8L1NvcnRPcmRlcj4NCiAgICAgIDxDb21wYW55SWQ+Q0lOPC9Db21wYW55SWQ+DQogICAgICA8QXNzb2NpYXRlaWQ+MjEwMzAxMTwvQXNzb2NpYXRlaWQ+DQogICAgPC9DdXJyZW50RWFybmluZ3M+DQogIDwvZGlmZmdyOmJlZm9yZT4NCjwvZGlmZmdyOmRpZmZncmFtPgQDAAAADlN5c3RlbS5WZXJzaW9uBAAAAAZfTWFqb3IGX01pbm9yBl9CdWlsZAlfUmV2aXNpb24AAAAACAgICAIAAAAAAAAA//////////8LHglJc0hSQVplcm9mHgxGb29kY2FyZEZsYWcFATAeCk1vbnRobHlBR0MCjooCHglBbm51YWxDVEMCjKkaHglwZmN1cnJlbnQCiA4eC0Fzc29jaWF0ZUlkBQcyMTAzMDExHhVJc1NhbGFyeVByb2Nlc3NlZF9ucHNmHgpNb250aGx5Q1RDAuGYAh4IY2FyTGVhc2UylR4AAQAAAP////8BAAAAAAAAAAwCAAAATlN5c3RlbS5EYXRhLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQUBAAAAFVN5c3RlbS5EYXRhLkRhdGFUYWJsZQMAAAAZRGF0YVRhYmxlLlJlbW90aW5nVmVyc2lvbglYbWxTY2hlbWELWG1sRGlmZkdyYW0DAQEOU3lzdGVtLlZlcnNpb24CAAAACQMAAAAGBAAAAOgaPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTE2Ij8+DQo8eHM6c2NoZW1hIHRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgeG1sbnM6bXN0bnM9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIHhtbG5zPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOm1zZGF0YT0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp4bWwtbXNkYXRhIiBhdHRyaWJ1dGVGb3JtRGVmYXVsdD0icXVhbGlmaWVkIiBlbGVtZW50Rm9ybURlZmF1bHQ9InF1YWxpZmllZCI+DQogIDx4czplbGVtZW50IG5hbWU9IkN1cnJlbnRFYXJuaW5ncyIgbXNkYXRhOkNhc2VTZW5zaXRpdmU9IkZhbHNlIiBtc2RhdGE6TG9jYWxlPSJlbi1VUyI+DQogICAgPHhzOmNvbXBsZXhUeXBlPg0KICAgICAgPHhzOnNlcXVlbmNlPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJDb21wb25lbnROYW1lIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iQ29tcG9uZW50SWQiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJBY3R1YWxDb21wb25lbnRJZCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlBheU91dEZyZXF1ZW5jeSIgbXNkYXRhOkNhcHRpb249IkNvbXBvbmVudFR5cGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJGbGV4aSIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IkNvbXBvbmVudFZhbHVlIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iQW5udWFsQ29tcG9uZW50VmFsdWUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJNaW5WYWx1ZSIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9Ik1heFZhbHVlIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iTWluUGVyIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iTWF4UGVyIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iQmFzZUNvbXBvbmVudCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlRvb2xUaXAiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJSYW5nZVR5cGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJTb3J0T3JkZXIiIHR5cGU9InhzOmludCIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJDb21wYW55SWQiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iaHR0cDovL3RlbXB1cmkub3JnL0Fzc29jaWF0ZUVhcm5pbmdzLnhzZCIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJBc3NvY2lhdGVpZCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vdGVtcHVyaS5vcmcvQXNzb2NpYXRlRWFybmluZ3MueHNkIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlRvb2xUaXAyIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9Imh0dHA6Ly90ZW1wdXJpLm9yZy9Bc3NvY2lhdGVFYXJuaW5ncy54c2QiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgIDwveHM6c2VxdWVuY2U+DQogICAgPC94czpjb21wbGV4VHlwZT4NCiAgPC94czplbGVtZW50Pg0KICA8eHM6ZWxlbWVudCBuYW1lPSJ0bXBEYXRhU2V0IiBtc2RhdGE6SXNEYXRhU2V0PSJ0cnVlIiBtc2RhdGE6TWFpbkRhdGFUYWJsZT0iaHR0cF94MDAzQV9feDAwMkZfX3gwMDJGX3RlbXB1cmkub3JnX3gwMDJGX0Fzc29jaWF0ZUVhcm5pbmdzLnhzZF94MDAzQV9DdXJyZW50RWFybmluZ3MiIG1zZGF0YTpMb2NhbGU9ImVuLVVTIj4NCiAgICA8eHM6Y29tcGxleFR5cGU+DQogICAgICA8eHM6Y2hvaWNlIG1pbk9jY3Vycz0iMCIgbWF4T2NjdXJzPSJ1bmJvdW5kZWQiIC8+DQogICAgPC94czpjb21wbGV4VHlwZT4NCiAgPC94czplbGVtZW50Pg0KPC94czpzY2hlbWE+BgUAAACAATxkaWZmZ3I6ZGlmZmdyYW0geG1sbnM6bXNkYXRhPSJ1cm46c2NoZW1hcy1taWNyb3NvZnQtY29tOnhtbC1tc2RhdGEiIHhtbG5zOmRpZmZncj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp4bWwtZGlmZmdyYW0tdjEiIC8+BAMAAAAOU3lzdGVtLlZlcnNpb24EAAAABl9NYWpvcgZfTWlub3IGX0J1aWxkCV9SZXZpc2lvbgAAAAAICAgIAgAAAAAAAAD//////////wsWAmYPZBYCAgEPZBYIAgEPFgIeB1Zpc2libGVoZAIEDw8WAh4EVGV4dAUXU2h1YmhhbSBNYW5kYWwoMjEwMzAxMSlkZAIFDzwrAA0BDBQrAAYFEzA6MCwwOjEsMDoyLDA6MywwOjQUKwACFgQfEQUNTXlEZWZpbml0aW9ucx4LTmF2aWdhdGVVcmwFI34vVUkuTXlGQlAvRmxleGlibGVCZW5lZml0UGxhbi5hc3B4ZBQrAAIWBB8RBQlNeVVwZGF0ZXMeClNlbGVjdGFibGVoFCsABQUPMDowLDA6MSwwOjIsMDozFCsAAhYEHxEFFFBlcnNvbmFsIEluZm9ybWF0aW9uHxIFJn4vVUkuTXlVcGRhdGUvUGVyc29uYWxJbmZvcm1hdGlvbi5hc3B4ZBQrAAIWBB8RBSVNb2JpbGUoRkJQKSAvIEJyb2FkYmFuZCBSZWltYnVyc2VtZW50HxIFLX4vVUkuTXlVcGRhdGUvQ3JlZGl0Q2FyZFBheW1hbnREZXRhaWxzTUIuYXNweGQUKwACFgQfEQUWTGVhdmUgVHJhdmVsIEFsbG93YW5jZR8SBRx+L1VJLk15VXBkYXRlL0xUQUNsYWltcy5hc3B4ZBQrAAIWBB8RBQhBZHZhbmNlcx8SBSN+L1VJLk15VXBkYXRlL011bHRpcGxlQWR2YW5jZXMuYXNweGQUKwACFgQfEQUNTXlJbnZlc3RtZW50cx8TaBQrAAYFEzA6MCwwOjEsMDoyLDA6MywwOjQUKwACFgQfEQUdSW5jb21lIFRheCBDb21wdXRhdGlvbiBNZXRob2QfEgUnfi9VSS5NeUludmVzdG1lbnRzL0luY29tZVRheE1ldGhvZC5hc3B4ZBQrAAIWBB8RBR5JbnZlc3RtZW50IERlY2xhcmF0aW9uL0FjdHVhbHMfEgUsfi9VSS5NeUludmVzdG1lbnRzL0ludmVzdG1lbnRBY3R1YWxEZWNsLmFzcHhkFCsAAhYEHxEFA0hSQR8SBSt+L1VJLk15SW52ZXN0bWVudHMvT3RoZXJJbnZlc3RtZW50c0hSQS5hc3B4ZBQrAAIWBB8RBRZMb3NzIG9uIEhvdXNlIFByb3BlcnR5HxIFM34vVUkuTXlJbnZlc3RtZW50cy9PdGhlckludmVzdG1lbnRzSG91c2luZ0xvYW4uYXNweGQUKwACFgQfEQUVSGlnaGVyIEVkdWNhdGlvbiBMb2FuHxIFLn4vVUkuTXlJbnZlc3RtZW50cy9PdGhlckludmVzdG1lbnRzSEVMb2FuLmFzcHhkFCsAAhYEHxEFDE15U3RhdGVtZW50cx8SBSd+L1VJLk15U3RhdGVtZW50cy9NeVN0YXRlbWVudHNNYWluLmFzcHhkFCsAAhYEHxEFB015Rm9ybXMfEgUOfi9NeUZvcm1zLmFzcHhkZAIGD2QWBAIJDw8WAh8RBQswMSBBcHIgMjAyNGRkAg0PZBYCZg9kFgYCAQ8WAh8QZxYCAgEPDxYCHxEFowFNZW50aW9uIFBSQU4gaW4gUGVyc29uYWwgSW5mb3JtYXRpb24gcGFnZSBzbyBhcyB0byBlbnRlciB2YWx1ZSBpbiBOUFMuIE1lbnRpb24gRm9vZCBDYXJkIG51bWJlciBpbiBQZXJzb25hbCBJbmZvcm1hdGlvbiBwYWdlIHRvIGF2YWlsIEZvb2QgUmVpbWJ1cnNlbWVudCBleGVtcHRpb24uZGQCAw9kFgRmD2QWAmYPZBYCAgEPDxYCHxEFM0ZsZXhpYmxlIEJlbmVmaXQgUGxhbiBpcyBmcm96ZW4gZm9yIGZ1cnRoZXIgdXBkYXRlc2RkAgIPZBYCZg9kFgICAQ88KwARAwAPFgQeC18hRGF0YUJvdW5kZx4LXyFJdGVtQ291bnQCEGQBEBYAFgAWAAwUKwAAFgJmD2QWIgIBD2QWCmYPZBYCAgEPDxYCHxEFBUJhc2ljZGQCAQ9kFgICAQ8WAh8QaBYCAgMPDxYCHgdFbmFibGVkaGRkAgIPZBYEAgEPDxYEHxEFBjExLDkyNR8QZ2RkAgMPDxYCHxZoZGQCAw9kFgQCAQ8PFgQfEQUHMTQzLDEwMB8QZ2RkAgMPDxYCHxZoZGQCBA9kFgYCAQ8PFgIfEWVkZAIDDw8WBB4LUG9zdEJhY2tVcmwFASMf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Dw8WBB8RBQYyNCwwMDAfEGdkZAIDDw8WAh8WaGRkAgQPZBYGAgEPDxYCHxFlZGQCAw8PFgQfFwUBIx8QaGRkAgUPDxYCHxFlZGQCDQ9kFgpmD2QWAgIBDw8WAh8RBRJHcm9zcyBDb21wZW5zYXRpb25kZAIBD2QWAgIBDxYCHxBoFgICAw8PFgIfFmhkZAICD2QWBAIBDw8WBB8RBQYzNCwwNjIfEGdkZAIDDw8WAh8WaGRkAgMPZBYEAgEPDxYEHxEFBzQwOCw3NDQfEGdkZAIDDw8WAh8WaGRkAgQPZBYGAgEPDxYCHxFlZGQCAw8PFgQfFwUBIx8QaGRkAgUPDxYCHxFlZGQCDg9kFgpmD2QWAgIBDw8WAh8RBQlJbmNlbnRpdmVkZAIBD2QWAgIBDxYCHxBoFgICAw8PFgIfFmhkZAICD2QWBAIBDw8WBB8RBQUxLDg3NR8QZ2RkAgMPDxYCHxZoZGQCAw9kFgQCAQ8PFgQfEQUGMjIsNTAwHxBnZGQCAw8PFgIfFmhkZAIED2QWBgIBDw8WAh8RZWRkAgMPDxYEHxcFASMfEGhkZAIFDw8WAh8RZWRkAg8PZBYKZg9kFgICAQ8PFgIfEQUSVG90YWwgQ29tcGVuc2F0aW9uZGQCAQ9kFgICAQ8WAh8QaBYCAgMPDxYCHxZoZGQCAg9kFgQCAQ8PFgQfEQUGMzUsOTM3HxBnZGQCAw8PFgIfFmhkZAIDD2QWBAIBDw8WBB8RBQc0MzEsMjQ0HxBnZGQCAw8PFgIfFmhkZAIED2QWBgIBDw8WAh8RZWRkAgMPDxYEHxcFASMfEGhkZAIFDw8WAh8RZWRkAhAPZBYKZg9kFgICAQ8PFgIfEQUYVm9sdW50YXJ5IFByb3ZpZGVudCBGdW5kZGQCAQ9kFgICAQ9kFggCAQ8PFgIfEGdkZAIDDw8WBh8RBQEwHxZoHxBnZGQCBw8WAh8YBRhWb2x1bnRhcnkgUHJvdmlkZW50IEZ1bmRkAgkPFgIfGAVd4oCiIFZQRiBhbGxvd3MgeW91IHRvIGNvbnRyaWJ1dGUgdG8gUHJvdmlkZW50IEZ1bmQgaW4gYWRkaXRpb24gdG8gdGhlIHN0YXR1dG9yeSBjb250cmlidXRpb24uZAICD2QWBAIDDw8WAh8WaGRkAgUPDxYEHxEFATAfEGdkZAIDD2QWAgIDDw8WAh8WaGRkAgQPZBYGAgEPDxYCHxEFQCBNYXhpbXVtIDogODglIG9mIEJhc2ljIHBtIG9yIHN1bSBvZiBQRiAmIFZQRiBlcXVhbHMgdG8gQmFzaWMgcG1kZAIDDw8WAh8QaGRkAgUPDxYCHxFlZGQCEQ8PFgIfEGhkZAIJDxYEHghkaXNhYmxlZAUIZGlzYWJsZWQfEGhkGAIFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYDBThjdGwwMCRNYWluQ29udGVudCRndkN1cnJlbnRFYXJuaW5nc01vbnRobHkkY3RsMDQkaW1nYnRuMQU4Y3RsMDAkTWFpbkNvbnRlbnQkZ3ZDdXJyZW50RWFybmluZ3NNb250aGx5JGN0bDA4JGltZ2J0bjEFOGN0bDAwJE1haW5Db250ZW50JGd2Q3VycmVudEVhcm5pbmdzTW9udGhseSRjdGwwOSRpbWdidG4xBSpjdGwwMCRNYWluQ29udGVudCRndkN1cnJlbnRFYXJuaW5nc01vbnRobHkPPCsADAEIAgFkL0WOAH5IPd4UP/vNatiydVGLJJKrDkc9M/R5skWVGEo=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/779/WebResource.axd?d=kJe2JYq1qocjHMQhP283RBiJ0_9WOjpknVWNizJPHOSlo1gHLonKf3a6dvgEfjF8zowA7eZufPqxDsewIYAPQ_6qu3c_ZoVw3pjnA1vrF5s1&amp;t=638369264615952268" type="text/javascript"></script>
+
+
+<script src="/779/ScriptResource.axd?d=qddtjOE88QH9GLKCuwuq48_XXQHeE8Ah3dL3nYXDMC2b3Iy6qMqMcCzB_dUtj5kh1Ua-DowVEk8A25YZLE_aISlbhAvB7pks170tpIE314eT1-tzJ6LDix4VA0nJS9YQ99fEtlGiQXkcpZit3sANfg2&amp;t=fffffffff37b5a97" type="text/javascript"></script>
+<script src="/779/ScriptResource.axd?d=6LnfBeeRsKTMmSdWpmcU7QVYnMze-c-7oTdSyzp8dnNY1L1F8HSYfSsmG0WQoDHR_lSTzF0KepES5Tj3gCNSGZVG8Q_N6ogAjKmAIwUuFQ4iJ7hLsfaPNDcr0a6FwGvY8sVSDZj-fFAVk66ufNBl9Ijz7nk5_Q2-GBWsYkAau141&amp;t=722fe453" type="text/javascript"></script>
+<script src="/779/ScriptResource.axd?d=fMHOfcV0QSmaLf2SHnHDKkx5vR3ebhUpprkHe64ClwqOp1rz-G8cbm0EXimlLpU2hlHN8CUb4VognESWEEqKiX8vu5lCWWikRNbiTPZ7noG4IZtExsDbxw6KU606mUqDwkxff05xzq70RbGE27Q7nrU7ECo6jPA31bRVi59AwpJ0I8Zo8haGG0k5YpkjABJN0&amp;t=722fe453" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="66466E88" />
+	<input type="hidden" name="__PREVIOUSPAGE" id="__PREVIOUSPAGE" value="xEA9Zm03T91aRslseeA6UgVPm0GJGaeQc6oawTLaZGKNnuHD7E9yWDBX3XkFRKuDx1eaL5N0KByk4JUoVDESbuYFEinx9W60guAVnE9WcXlRNe4OEJTrNUH0PYA3ugur0" />
+</div>      
+    <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$scrManager', 'form1', ['tctl00$MainContent$upd1','MainContent_upd1'], [], [], 90, 'ctl00');
+//]]>
+</script>
+
+    <div id="wrapper">
+        <input type="hidden" value="false" id="isPrv" />
+        <input type="hidden" value="202425" id="finY" />
+        
+        <div id="header">
+            <div id="logo"><a ><img src="../images/MyPay_logo.png" alt="" title="" id="mylogo" /></a>
+                <div id="showPrv" style="position: absolute;padding-top: 65px;padding-left: 30px;">
+                  <p style="font-size: 16px;"><strong id="finyr"></strong></p></div>
+            </div>
+
+            <div id="mainNav">
+                <div id="nav1">
+                    <ul>
+                        <li><a href="/779/Default.aspx" class="home" id="defaultpage"><img class="spaceClass" src="/779/images/spacer.png" width="26" height="26" title="Home"  alt=""/></a></li>
+                        <li><a href="#" onclick="show_bankers_popup();" class="preferred_bank"><img class="spaceClass" src="/779/images/spacer.png" width="26" height="26" title="Preferred Bankers" /></a></li>
+                        <li><a href="#" class="faq">
+                            <img class="spaceClass" src="/779/images/spacer.png" onclick="show_faq_popup();" width="26" height="26" title="Downloads & Links" alt="" /></a></li>
+                        <li>
+                        <a id="lnkLogout" title="Logout" class="logout" href="javascript:__doPostBack(&#39;ctl00$lnkLogout&#39;,&#39;&#39;)" style="color:White;"><span id="lblLogout" class="font-small" style="color:White;">Logout</span></a>
+                        <br />
+                            
+                        </li>
+                        
+
+                    </ul>
+                    <div class="clear">
+                        &nbsp;</div>
+                    <div id="welcome">
+                            <span id="lblWelcomeUser" class="font-small">Welcome </span>
+                            <div class="clear">
+                            <span id="lblMasterPageUserName">Shubham Mandal(2103011)</span>
+                            </div>
+                            
+                    </div>
+                </div>
+                <div id="nav2">
+                    <div id="menuHolder">
+                        <!-- Menu Starts -->
+                        <div class="menu-left-wrapper">
+                        </div>
+                        <div class="menu-middle-wrapper">
+                            <a href="#mypayMenu_SkipLink" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">Skip Navigation Links</a><div id="mypayMenu">
+	<ul class="level1">
+		<li><a class="level1" href="FlexibleBenefitPlan.aspx">MyDefinitions</a></li><li><a class="popout level1">MyUpdates</a><ul class="level2">
+			<li><a class="level2" href="../UI.MyUpdate/PersonalInformation.aspx">Personal Information</a></li><li><a class="level2" href="../UI.MyUpdate/CreditCardPaymantDetailsMB.aspx">Mobile(FBP) / Broadband Reimbursement</a></li><li><a class="level2" href="../UI.MyUpdate/LTAClaims.aspx">Leave Travel Allowance</a></li><li><a class="level2" href="../UI.MyUpdate/MultipleAdvances.aspx">Advances</a></li>
+		</ul></li><li><a class="popout level1">MyInvestments</a><ul class="level2">
+			<li><a class="level2" href="../UI.MyInvestments/IncomeTaxMethod.aspx">Income Tax Computation Method</a></li><li><a class="level2" href="../UI.MyInvestments/InvestmentActualDecl.aspx">Investment Declaration/Actuals</a></li><li><a class="level2" href="../UI.MyInvestments/OtherInvestmentsHRA.aspx">HRA</a></li><li><a class="level2" href="../UI.MyInvestments/OtherInvestmentsHousingLoan.aspx">Loss on House Property</a></li><li><a class="level2" href="../UI.MyInvestments/OtherInvestmentsHELoan.aspx">Higher Education Loan</a></li>
+		</ul></li><li><a class="level1" href="../UI.MyStatements/MyStatementsMain.aspx">MyStatements</a></li><li><a class="level1" href="../MyForms.aspx">MyForms</a></li>
+	</ul>
+</div><a id="mypayMenu_SkipLink"></a>
+                        </div>
+                        <div class="menu-right-wrapper">
+                        </div>
+                        <!-- Menu Ends -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="contentArea">
+            <div>
+                
+    <input name="ctl00$MainContent$hidHRA" type="hidden" id="hidHRA" />
+    <input name="ctl00$MainContent$hidpopupLTA" type="hidden" id="MainContent_hidpopupLTA" />
+    <input name="ctl00$MainContent$IsLTAEditable" type="hidden" id="MainContent_IsLTAEditable" />
+     <div>
+        <h2 class="fbp_heading">Flexible Benefit Plan</h2>
+        <span class="alignLeft normalText bold_txt">
+            <span id="MainContent_lblmsgEffDate">Effective From:</span>&nbsp;
+            <span id="MainContent_lblEffectiveDate">01 Apr 2024</span>
+        </span>
+        <a class="Hyperlink" href="javascript:__doPostBack(&#39;ctl00$MainContent$ctl00&#39;,&#39;&#39;)" style="padding-left: 425px !important; font-weight: bold;"><u>FBP Policy</u></a><a class="helpTooltip alignRight">Help
+        <img src="../images/spacer.png" class="questionMark" />
+                <div class="tooltipContent">
+                    <div class="tooltipHeading">
+                        Flexible Benefit Plan
+                    </div>
+                    <div>
+                        <img src="../images/spacer.png" class="arrow" />
+                    </div>
+                    <ul class="dot_list">
+                        <li>Flexible Benefit Plan (FBP) allows you to structure your benefits to suit your needs.</li>
+                        <li>With FBP you can choose from a bouquet of components that comprise your benefits structure.</li>
+                        <li>You can define/redefine your FBP components any number of times between 5th and 25th of every month</li>
+                        <li>Last saved definition would be considered for current month payroll processing.  </li>
+                        <li>Definitions can be made for current and future months only. </li>
+                        <li>You can use the Special allowance amount to define your set of FBP components. </li>
+                        <li>Reimbursements defined under FBP, are made on finance due dates based on submissions / transaction confirmations.</li>
+                        <li>Component wise quick uploads are available for easy navigations.</li>
+                    </ul>
+                </div>
+            </a>
+        <div id="MainContent_upd1">
+	
+                <div class="formContainer formContainerAlignCenter">
+                    <div id="MainContent_divHint" class="hintSection alignLeft">
+                        <p class="hint fullText">
+                            <marquee scrollamount="4">
+                            <span id="MainContent_lblFBPmessagedisplay">Mention PRAN in Personal Information page so as to enter value in NPS. Mention Food Card number in Personal Information page to avail Food Reimbursement exemption.</span>
+                            </marquee>
+                        </p>
+                    </div>
+                    <div class="clear">
+                    </div>
+                    <table id="MainContent_tblEarnignsHeader" width="100%">
+		<tr>
+			<td align="right" valign="top" width="70%">
+                                <span id="MainContent_lblFreezeMsg" class="alertMessage">Flexible Benefit Plan is frozen for further updates</span>
+                            </td>
+			<td></td>
+		</tr>
+		<tr>
+			<td align="center" valign="top" colspan="2">
+                                
+                            </td>
+		</tr>
+		<tr>
+			<td colspan="2">
+                                <div>
+				<table class="earningTable" cellspacing="0" rules="all" border="1" id="MainContent_gvCurrentEarningsMonthly" style="width:100%;border-collapse:collapse;">
+					<tr>
+						<th scope="col">Components</th><th scope="col">&nbsp;</th><th scope="col">Monthly (Rs)</th><th scope="col">Annual (Rs)</th><th scope="col">Definition Limit</th>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_0">Basic</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_0">11,925</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_0">143,100</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_0" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_0" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_1">Provident Fund</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_1">1,800</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_1">21,600</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_1" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_1" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_2">House Rent Allowance</span>
+                                                <a href="#" id="MainContent_gvCurrentEarningsMonthly_hraAnchor_2">
+                                                    <img title="HRA Calculator" id="hraImg" width="20px" height="20px" class="hraCalc basic alignRight" onclick="show_popup();" title="HRA Calculator" src="../images/spacer.png" />
+                                                </a>
+                                            </td><td>
+                                                <div id="MainContent_gvCurrentEarningsMonthly_imgQuestionMark_2">
+                                                    
+                                                    
+                                                    <a class="helpTooltipVertical alignRight">
+                                                        <img src="../images/spacer.png" id="MainContent_gvCurrentEarningsMonthly_Img1_2" class="questionMark" />
+                                                        <div class="tooltipContentVertical">
+                                                            <div id="MainContent_gvCurrentEarningsMonthly_heading_2" class="tooltipHeading">House Rent Allowance</div>
+
+                                                            <img src="../images/spacer.png" class="arrow" />
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip1_2">• House Rent Allowance is an allowance extended to the employee towards monthly payment of rent.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip2_2">• Define adequate HRA in Earnings definition page for claiming this benefit.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip3_2">• This exemption cannot be claimed if you have an own property in the same city and you claim for stay in a rented accommodation.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip4_2">• Go to ‘HRA’ page to submit necessary proofs.</p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_2">7,155</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_2">85,860</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_2" class="light"></span>
+                                                <input type="image" name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl04$imgbtn1" id="MainContent_gvCurrentEarningsMonthly_imgbtn1_2" title="Upload" class="upload" src="../images/spacer.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$MainContent$gvCurrentEarningsMonthly$ctl04$imgbtn1&quot;, &quot;&quot;, false, &quot;&quot;, &quot;../UI.MyInvestments/OtherInvestmentsHRA.aspx&quot;, false, false))" />
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_2" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_3">Conveyance Allowance</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_3">800</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_3">9,600</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_3" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_3" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_4">Medical Allowance</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                
+                                                <input name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl06$txtEditableMonthlyComp" type="text" value="1,250" maxlength="8" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$gvCurrentEarningsMonthly$ctl06$txtEditableMonthlyComp\&#39;,\&#39;\&#39;)&#39;, 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="MainContent_gvCurrentEarningsMonthly_txtEditableMonthlyComp_4" disabled="disabled" class="aspNetDisabled hover textBox-02" />
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_4">15,000</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_4" class="light"> Maximum : Rs 1,250/- pm</span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_4" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_5">Leave Travel Allowance</span>
+                                                
+                                            </td><td>
+                                                <div id="MainContent_gvCurrentEarningsMonthly_imgQuestionMark_5">
+                                                    
+                                                    
+                                                    <a class="helpTooltipVertical alignRight">
+                                                        <img src="../images/spacer.png" id="MainContent_gvCurrentEarningsMonthly_Img1_5" class="questionMark" />
+                                                        <div class="tooltipContentVertical">
+                                                            <div id="MainContent_gvCurrentEarningsMonthly_heading_5" class="tooltipHeading">Leave Travel Allowance</div>
+
+                                                            <img src="../images/spacer.png" class="arrow" />
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip1_5">• Leave Travel Allowance provides for reimbursement of ticket costs incurred on your domestic travel and does not include international travel.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip2_5">• Fare charges pertaining to self and family (spouse, children, parents, brothers and sisters wholly dependent on the associate) can be claimed.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip3_5">• LTA encashed without performing the journey will be paid along with salary on the month on which it is claimed, after deducting applicable TDS.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip4_5">• LTA value once updated cannot be changed and would remain the same for the whole Financial Year.</p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_5">0</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_5">0</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_5" class="light"> Maximum : Rs 100,000/- pa</span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_5" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_6">Mobile Reimbursement</span>
+                                                
+                                            </td><td>
+                                                <div id="MainContent_gvCurrentEarningsMonthly_imgQuestionMark_6">
+                                                    
+                                                    
+                                                    <a class="helpTooltipVertical alignRight">
+                                                        <img src="../images/spacer.png" id="MainContent_gvCurrentEarningsMonthly_Img1_6" class="questionMark" />
+                                                        <div class="tooltipContentVertical">
+                                                            <div id="MainContent_gvCurrentEarningsMonthly_heading_6" class="tooltipHeading">Mobile Reimbursement</div>
+
+                                                            <img src="../images/spacer.png" class="arrow" />
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip1_6">• Mobile Reimbursement aims at reimbursing the associates for mobile usage for official purposes.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip2_6">• This can be claimed by making the mobile payment through your credit card, which is registered in My Updates – Personal Details for reimbursement purposes.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip3_6">• Make sure you define the reimbursement amount under Earnings Definition page.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip4_6"></p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                
+                                                <input name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl08$txtEditableMonthlyComp" type="text" value="0" maxlength="8" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$gvCurrentEarningsMonthly$ctl08$txtEditableMonthlyComp\&#39;,\&#39;\&#39;)&#39;, 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="MainContent_gvCurrentEarningsMonthly_txtEditableMonthlyComp_6" disabled="disabled" class="aspNetDisabled hover textBox-02" />
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_6">0</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_6" class="light"> Maximum : Rs 500/- pm</span>
+                                                <input type="image" name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl08$imgbtn1" id="MainContent_gvCurrentEarningsMonthly_imgbtn1_6" title="Update" class="upload" src="../images/spacer.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$MainContent$gvCurrentEarningsMonthly$ctl08$imgbtn1&quot;, &quot;&quot;, false, &quot;&quot;, &quot;../UI.MyUpdate/PersonalInformation.aspx&quot;, false, false))" />
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_6" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_7">Food Reimbursement</span>
+                                                
+                                            </td><td>
+                                                <div id="MainContent_gvCurrentEarningsMonthly_imgQuestionMark_7">
+                                                    
+                                                    
+                                                    <a class="helpTooltipVertical alignRight">
+                                                        <img src="../images/spacer.png" id="MainContent_gvCurrentEarningsMonthly_Img1_7" class="questionMark" />
+                                                        <div class="tooltipContentVertical">
+                                                            <div id="MainContent_gvCurrentEarningsMonthly_heading_7" class="tooltipHeading">Food Reimbursement</div>
+
+                                                            <img src="../images/spacer.png" class="arrow" />
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip1_7">•	Food Reimbursement aims at providing an allowance for food items, swiped through a “Food card”.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip2_7">•	The amount will be credited as reimbursement to the Food Card at the end of every month.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip3_7">•	For maximum accumulation limit , Please refer FBP policy document</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip4_7"></p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                
+                                                <input name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl09$txtEditableMonthlyComp" type="text" value="0" maxlength="8" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$gvCurrentEarningsMonthly$ctl09$txtEditableMonthlyComp\&#39;,\&#39;\&#39;)&#39;, 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="MainContent_gvCurrentEarningsMonthly_txtEditableMonthlyComp_7" disabled="disabled" class="aspNetDisabled hover textBox-02" />
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_7">0</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_7" class="light"> Maximum : Rs 3,000/- pm</span>
+                                                <input type="image" name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl09$imgbtn1" id="MainContent_gvCurrentEarningsMonthly_imgbtn1_7" title="Update" class="upload" src="../images/spacer.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$MainContent$gvCurrentEarningsMonthly$ctl09$imgbtn1&quot;, &quot;&quot;, false, &quot;&quot;, &quot;../UI.MyUpdate/PersonalInformation.aspx&quot;, false, false))" />
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_7" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_8">Superannuation Fund Contribution</span>
+                                                
+                                            </td><td>
+                                                <div id="MainContent_gvCurrentEarningsMonthly_imgQuestionMark_8">
+                                                    
+                                                    
+                                                    <a class="helpTooltipVertical alignRight">
+                                                        <img src="../images/spacer.png" id="MainContent_gvCurrentEarningsMonthly_Img1_8" class="questionMark" />
+                                                        <div class="tooltipContentVertical">
+                                                            <div id="MainContent_gvCurrentEarningsMonthly_heading_8" class="tooltipHeading">SA Fund Contribution</div>
+
+                                                            <img src="../images/spacer.png" class="arrow" />
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip1_8">• Superannuation Fund is a retirement benefit provided to employees.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip2_8">• The amount defined by you under FBP will be deducted from your monthly salary.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip3_8">• Contribution made to the fund upto the extent of 15% of basic salary is totally exempt from income tax.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip4_8">• Associate who opt for this benefit cannot come out of this or withdraw accumulations during his/her tenure with Cognizant.</p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                
+                                                <input name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl10$txtEditableMonthlyComp" type="text" value="0" maxlength="8" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$gvCurrentEarningsMonthly$ctl10$txtEditableMonthlyComp\&#39;,\&#39;\&#39;)&#39;, 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="MainContent_gvCurrentEarningsMonthly_txtEditableMonthlyComp_8" disabled="disabled" class="aspNetDisabled hover textBox-02" />
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_8">0</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_8" class="light"> Minimum contribution of Rs. 500 per month and subject to a ceiling of 15% of Basic salary</span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_8" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_9">National Pension System</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                
+                                                <input name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl11$txtEditableMonthlyComp" type="text" value="0" maxlength="8" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$gvCurrentEarningsMonthly$ctl11$txtEditableMonthlyComp\&#39;,\&#39;\&#39;)&#39;, 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="MainContent_gvCurrentEarningsMonthly_txtEditableMonthlyComp_9" disabled="disabled" class="aspNetDisabled hover textBox-02" />
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_9">0</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_9" class="light"> Maximum : 10% of Basic pm</span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_9" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_10">Special Allowance</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_10">9,132</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_10">109,584</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_10" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_10" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_11">Advance Statutory Bonus</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_11">2,000</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_11">24,000</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_11" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_11" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_12">Gross Compensation</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_12">34,062</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_12">408,744</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_12" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_12" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_13">Incentive</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_13">1,875</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_13">22,500</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_13" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_13" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_14">Total Compensation</span>
+                                                
+                                            </td><td>
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableMonthlyComp_14">35,937</span>
+                                                
+                                                
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblNonEditableAnnualComp_14">431,244</span>
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_14" class="light"></span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_14" class="light"></span>
+                                            </td>
+					</tr><tr>
+						<td align="left" style="height:16px;width:18%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblComponents_15">Voluntary Provident Fund</span>
+                                                
+                                            </td><td>
+                                                <div id="MainContent_gvCurrentEarningsMonthly_imgQuestionMark_15">
+                                                    <span id="MainContent_gvCurrentEarningsMonthly_lblvpf_15" class="alignRight">%</span>
+                                                    <input name="ctl00$MainContent$gvCurrentEarningsMonthly$ctl17$txtVoluntayPF" type="text" value="0" maxlength="2" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$gvCurrentEarningsMonthly$ctl17$txtVoluntayPF\&#39;,\&#39;\&#39;)&#39;, 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="MainContent_gvCurrentEarningsMonthly_txtVoluntayPF_15" disabled="disabled" class="aspNetDisabled hover textBox-02" />
+                                                    <a class="helpTooltipVertical alignRight">
+                                                        <img src="../images/spacer.png" id="MainContent_gvCurrentEarningsMonthly_Img1_15" class="questionMark" />
+                                                        <div class="tooltipContentVertical">
+                                                            <div id="MainContent_gvCurrentEarningsMonthly_heading_15" class="tooltipHeading">Voluntary Provident Fund</div>
+
+                                                            <img src="../images/spacer.png" class="arrow" />
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip1_15">• VPF allows you to contribute to Provident Fund in addition to the statutory contribution.</p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip2_15"></p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip3_15"></p>
+                                                            <p id="MainContent_gvCurrentEarningsMonthly_toolTip4_15"></p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblVoluntayPF_15">0</span>
+                                            </td><td align="right" style="height:16px;width:10%;">
+                                                
+                                                
+                                            </td><td align="center" style="height:16px;width:42%;">
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip_15" class="light"> Maximum : 88% of Basic pm or sum of PF & VPF equals to Basic pm</span>
+                                                
+                                                <span id="MainContent_gvCurrentEarningsMonthly_lblToolTip2_15" class="light"></span>
+                                            </td>
+					</tr>
+				</table>
+			</div>
+                            </td>
+		</tr>
+		<tr>
+			<td align="left">
+                                
+                            </td>
+		</tr>
+	</table>
+	
+                </div>
+                <div class="col-100 formContainerNoHeadBrdr textAlignCenter">
+                    <div>
+                        <span id="MainContent_CarAndConveyMsg" style="color:Red;font-size:12px;"></span>
+                        <span id="MainContent_DriverAndConveyMsg" style="color:Red;font-size:12px;"></span>
+
+                    </div>
+                    <br />
+                    
+                    
+                </div>
+            
+</div>
+    </div>
+    <div class="mask">
+    </div>
+    <div id="calculator_popup">
+        <a class="popup_close_btn" title="Close"></a>
+        <iframe id="popup_container" src="../UI.MyInvestments/HRACalculator.aspx"></iframe>
+    </div>
+
+            </div>
+            <div>
+                
+            </div>
+        </div>
+    </div>
+    <div id="foot">
+    </div>
+    <div class="mask">
+    </div>
+    <div id="faq_popup">
+        <a class="popup_close_btn" title="Close"></a>
+        <iframe id="popup_container1" src=""></iframe>
+    </div>
+    <div id="bankers_popup">
+        <a class="popup_close_btn" title="Close"></a>
+        <iframe id="bank_container" src=""></iframe>
+    </div>
+    
+<script type='text/javascript'>new Sys.WebForms.Menu({ element: 'mypayMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+</body>
+</html>
